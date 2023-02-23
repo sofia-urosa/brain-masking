@@ -1,0 +1,7 @@
+opencv-python-headless==4.7.0.68
+MedPy==0.4.0
+scikit-image==0.19.3
+keras==2.11.0
+tensorflow==2.11.0
+tqdm==4.64.1
+numpy==1.24.1
