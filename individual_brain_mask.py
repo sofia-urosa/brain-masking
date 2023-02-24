@@ -120,19 +120,6 @@ def __normalize0_255(img_slice):
     return new_img
 
 def __postProcessing(mask):
-    size, radius = 5, 2
-
-    A = np.zeros((size,size, size))
-    AA = deepcopy(A) 
-    x0, y0, z0 = int(np.floor(A.shape[0]/2)), \
-            int(np.floor(A.shape[1]/2)), int(np.floor(A.shape[2]/2))
-    
-    for x in range(x0-radius, x0+radius+1):
-        for y in range(y0-radius, y0+radius+1):
-            for z in range(z0, z0+1):   
-                deb = radius - ((x0-x)**2 + (y0-y)**2 + (z0-z)**2)**0.5 
-                if (deb)>=0: AA[x,y,z] = 1
-
     pred_mask_dil = binary_dilation(np.squeeze(mask),cube(2))
     pred_mask = binary_closing(np.squeeze(pred_mask_dil), cube(2))
 
