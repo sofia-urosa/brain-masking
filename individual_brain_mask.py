@@ -120,8 +120,23 @@ def __normalize0_255(img_slice):
     return new_img
 
 def __postProcessing(mask):
-    pred_mask_dil = binary_dilation(np.squeeze(mask),cube(2))
-    pred_mask = binary_closing(np.squeeze(pred_mask_dil), cube(2))
+
+    mask = np.squeeze(mask)
+    x , y , z = np.shape(mask)
+    #mask = mask.T
+
+    dilated_mask = np.zeros((x,y,z))
+    print(mask.shape)
+
+    footprint= disk(3)
+
+    for slice in range(z):
+        t = mask[:,:,slice]
+        slice_dilated = binary_dilation(t,footprint)*1
+        dilated_mask[:,:,slice] = slice_dilated
+
+    #pred_mask_dil = binary_dilation(np.squeeze(mask),cube(2))
+    pred_mask = binary_closing(np.squeeze(dilated_mask), cube(2))
 
     try:
         labels = label(pred_mask)
@@ -195,7 +210,7 @@ def main():
                 res = __resizeData(res.astype(np.uint16), target = original_shape)
             
             #remove extra dimension
-            res = np.squeeze(res)
+            #res = np.squeeze(res)
 
             #return result into shape (256,256,X)
             res = np.moveaxis(res, 0, -1)
