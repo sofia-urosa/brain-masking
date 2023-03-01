@@ -87,7 +87,7 @@ def __resizeData(image, target=(256, 256)):
         img_slice = cv2.resize(image[i,:,:], target)
         resized_img.append(img_slice)
 
-    image = np.array(resized_img, dtype=np.uint16)
+    image = np.array(resized_img, dtype=np.float32)
 
     return image[..., np.newaxis]
 
@@ -140,7 +140,7 @@ def __postProcessing(mask):
 
     try:
         labels = label(pred_mask)
-        pred_mask = (labels == np.argmax(np.bincount(labels.flat)[1:])+1).astype(np.uint16)
+        pred_mask = (labels == np.argmax(np.bincount(labels.flat)[1:])+1).astype(np.float32)
     except:
         pred_mask = pred_mask
 
@@ -207,10 +207,10 @@ def main():
                 res = __postProcessing(res)
 
             if resizeNeeded:
-                res = __resizeData(res.astype(np.uint16), target = original_shape)
+                res = __resizeData(res.astype(np.float32), target = original_shape)
             
             #remove extra dimension
-            #res = np.squeeze(res)
+            res = np.squeeze(res)
 
             #return result into shape (256,256,X)
             res = np.moveaxis(res, 0, -1)
