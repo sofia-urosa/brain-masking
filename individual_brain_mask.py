@@ -75,7 +75,7 @@ def getImageData(fname):
         norm_data.append(__normalize0_255(img_slice))
 
     # remake 3D representation of the image
-    data = np.array(norm_data, dtype=np.uint16)
+    data = np.array(norm_data, dtype=np.float32)
 
     data = data[..., np.newaxis]
     return data, hdr
