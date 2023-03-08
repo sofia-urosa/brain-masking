@@ -11,7 +11,7 @@ from medpy.io import load, save
 from models.model import Unet
 from skimage.transform import resize
 from skimage.measure import label
-from skimage.morphology import binary_closing, cube, ball, binary_dilation, square, disk
+from skimage.morphology import binary_closing, binary_dilation, square, disk
 
 parser = argparse.ArgumentParser()
 
@@ -63,7 +63,6 @@ dilation_footprint = args.dilation_footprint
 if match:
     for i in range(len(match)):
         match[i] = match[i].lower()
-#print(args.target)
 
 def getImageData(fname):
 
@@ -143,13 +142,13 @@ def __postProcessing(mask):
                 footprint = disk(dilation_footprint[1])
             else:
                 print('Footprint shape not recognized, switching to default')
-                footprint = disk(3)
+                footprint = disk(2)
 
         except ValueError:
             print('That size is not supported, switching to default')
-            footprint = disk(3)
+            footprint = disk(2)
     else:
-        footprint = disk(3)
+        footprint = disk(2)
 
     for slice in range(z):
         t = mask[:,:,slice]
