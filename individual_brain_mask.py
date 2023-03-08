@@ -11,7 +11,7 @@ from medpy.io import load, save
 from models.model import Unet
 from skimage.transform import resize
 from skimage.measure import label
-from skimage.morphology import binary_closing, binary_dilation, square, disk
+from skimage.morphology import binary_closing, binary_dilation, square, disk, cube
 
 parser = argparse.ArgumentParser()
 
