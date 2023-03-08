@@ -49,7 +49,7 @@ parser.add_argument('--match',
 parser.add_argument('--dilation_footprint',
     nargs=2,
     default=disk(3),
-    help='Specify the shape and size of the footprint used for dilation. Shapes avaliable are disk and square. If none specified, default is disk(3). Usage example: --dilation-footprint square 3')
+    help='Specify the shape and size of the footprint used for dilation. Shapes avaliable are disk and square. If none specified, default is disk(2). Usage example: --dilation-footprint square 3')
 
 model_type = 'unet'
 
