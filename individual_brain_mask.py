@@ -12,7 +12,6 @@ from models.model import Unet
 from skimage.transform import resize
 from skimage.measure import label
 from skimage.morphology import binary_closing, cube, ball, binary_dilation, square, disk
-from copy import deepcopy
 
 parser = argparse.ArgumentParser()
 
@@ -47,6 +46,11 @@ parser.add_argument('--match',
     nargs='+',
     help='Specify if only files with certain words should be masked, not case sensitive')
 
+parser.add_argument('--dilation_footprint',
+    nargs=2,
+    default=disk(3),
+    help='Specify the shape and size of the footprint used for dilation. Shapes avaliable are disk and square. If none specified, default is disk(3). Usage example: --dilation-footprint square 3')
+
 model_type = 'unet'
 
 args = parser.parse_args()
@@ -54,6 +58,7 @@ target_file = args.target_file
 remasking = args.remasking
 post_processing = args.post_processing
 match = args.match
+dilation_footprint = args.dilation_footprint
 
 if match:
     for i in range(len(match)):
@@ -123,19 +128,35 @@ def __postProcessing(mask):
 
     mask = np.squeeze(mask)
     x , y , z = np.shape(mask)
-    #mask = mask.T
 
     dilated_mask = np.zeros((x,y,z))
-    print(mask.shape)
 
-    footprint= disk(3)
+    #Binary dilation
+    
+    if type(dilation_footprint) is list:
+        try:
+            dilation_footprint[1] = int(dilation_footprint[1])
+
+            if dilation_footprint[0] == 'square':
+                footprint=square(dilation_footprint[1])
+            elif dilation_footprint[0] == 'disk':
+                footprint = disk(dilation_footprint[1])
+            else:
+                print('Footprint shape not recognized, switching to default')
+                footprint = disk(3)
+
+        except ValueError:
+            print('That size is not supported, switching to default')
+            footprint = disk(3)
+    else:
+        footprint = disk(3)
 
     for slice in range(z):
         t = mask[:,:,slice]
         slice_dilated = binary_dilation(t,footprint)*1
         dilated_mask[:,:,slice] = slice_dilated
 
-    #pred_mask_dil = binary_dilation(np.squeeze(mask),cube(2))
+    #Binary closing
     pred_mask = binary_closing(np.squeeze(dilated_mask), cube(2))
 
     try:
