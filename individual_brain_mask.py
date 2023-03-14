@@ -64,6 +64,24 @@ if match:
     for i in range(len(match)):
         match[i] = match[i].lower()
 
+if type(dilation_footprint) is list:
+    try:
+        dilation_footprint[1] = int(dilation_footprint[1])
+
+        if dilation_footprint[0] == 'square':
+            footprint=square(dilation_footprint[1])
+        elif dilation_footprint[0] == 'disk':
+                footprint = disk(dilation_footprint[1])
+        else:
+            print('Footprint shape not recognized, switching to default disk(2)')
+            footprint = disk(2)
+
+    except ValueError:
+        print('That size is not supported, switching to default disk(2)')
+        footprint = disk(2)
+else:
+    footprint = disk(2)
+
 def getImageData(fname):
 
     '''Returns the image data, image matrix and header of
@@ -131,24 +149,6 @@ def __postProcessing(mask):
     dilated_mask = np.zeros((x,y,z))
 
     #Binary dilation
-    
-    if type(dilation_footprint) is list:
-        try:
-            dilation_footprint[1] = int(dilation_footprint[1])
-
-            if dilation_footprint[0] == 'square':
-                footprint=square(dilation_footprint[1])
-            elif dilation_footprint[0] == 'disk':
-                footprint = disk(dilation_footprint[1])
-            else:
-                print('Footprint shape not recognized, switching to default')
-                footprint = disk(2)
-
-        except ValueError:
-            print('That size is not supported, switching to default')
-            footprint = disk(2)
-    else:
-        footprint = disk(2)
 
     for slice in range(z):
         t = mask[:,:,slice]
