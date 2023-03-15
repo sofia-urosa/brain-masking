@@ -10,7 +10,7 @@
 
 ## Description
 
-Deep learning based project for the automatic masking of a fetal brain. It can take either individual NIfTI files or the contents
+Deep learning based project made to automatically mask fetal brains. It can take either individual NIfTI files or the contents
 of a specified directory.
 
 Currently only a U-net based model is available.
