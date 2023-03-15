@@ -19,6 +19,16 @@ Depending on the input provided (a file or a directory), this tool will recusive
 It will save a new mask with the name name_mask.nii for each .nii file found on the path provided. and it 
 will skip those files that end with mask.nii unless specified otherwise with the --remasking flag.
 
+### About this model
+
+This model was trained with a dataset comprising of ~700 reviewed stacks of images and masks, adding to a total of ~20,000 images. 
+It has a wider range of data to improve its robustness. For the sake of identifying this model against priors, its called `emerald`.
+
+Here are some images showcasing its performance against the previous model, where the $\textcolor{cyan}{\text{blue}}$ mask corresponds to the old model and the $\textcolor{yellow}{\text{yellow}}$ mask to emeralds.
+
+![image1](image1.png)
+![image2](image2.png)
+![image3](image3.png)
 
 ## Requirements
 
@@ -27,13 +37,13 @@ will skip those files that end with mask.nii unless specified otherwise with the
 
 The following can be installed with the requirements.txt file:
 
-- opencv-python-headless==4.7.0.68
-- MedPy==0.4.0
-- scikit-image==0.19.3
-- keras==2.11.0
-- tensorflow==2.11.0
-- tqdm==4.64.1
-- numpy==1.24.1
+- opencv-python-headless == 4.7.0.68
+- MedPy == 0.4.0
+- scikit-image == 0.19.3
+- keras == 2.11.0
+- tensorflow == 2.11.0
+- tqdm == 4.64.1
+- numpy == 1.24.1
 
 ## Usage
 
@@ -42,9 +52,10 @@ check out the [setup](#setup) section.
 
 Once you have a virtual environment with all the requirements installed, you can run this tool with the command:
 
-    (env_name)$ python individual_brain_mask.py [-h] [--remasking] [--no-remasking] [--post-processing] \
-                        [--no-post-processing] [--match MATCH [MATCH ...]] [--dilation_footprint SHAPE SIZE] \
-                        target_file [target_file ...]
+```python
+python individual_brain_mask.py  target_file [target_file ...] [-h] [--remasking] [--no-remasking] [--post-processing] \
+[--no-post-processing] [--match MATCH [MATCH ...]] [--dilation_footprint SHAPE SIZE]
+```
                         
 Where:
    
@@ -62,21 +73,42 @@ Where:
 ## Limitations
 - Unet can currently only work with 256x256 images
 
-## About this model
-
-
-
 ## Setup
 
-Create a new environment and activate it. VENV 
-The environments name should appear at the beginnig of the shell 
-surrounded by parentheses
+You can create a new virtual environment using the `venv` command:
+
+```python
+python -m venv /path/env_name
+```
+    
+This will create a virtual environment called `env_name` in the directory `/path`.
+To activate it, run:
+
+```python
+source /path/env_name/bin/activate
+```
+
+The environments name should appear at the beginnig of the shell surrounded by parentheses, like this:
+
+```python
+(env_name)$
+```
+    
+For further information on how virtual envirionments work, check the [python documentation](https://docs.python.org/3/library/venv.html).
+    
+### Download the tool
 
 Download the source code, cd into your desired location
 
-    (env_name)$ git clone **
-    (env_name)$ cd brain-masking
+```python
+(env_name)$ git clone **
+(env_name)$ cd brain-masking
+```
 
 Install requirements from requirements.txt
 
-    (env_name)$ pip install -r requirements.txt
+```python
+(env_name)$ pip install -r requirements.txt
+```
+    
+ And run the tool using the command found in [usage](#usage).
