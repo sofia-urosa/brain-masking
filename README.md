@@ -1,17 +1,27 @@
 # Automatic Brain Masking
 
-Deep learning based proyect for the automatic masking of a fetal brain.
-Takes as input either the contents of the directory specified or the individual image.
+## Table of contents
 
-Currently only a unet based model can be used. 
+* [Description](#description)
+* [Requirements](#requirements)
+* [Limitations](#limitations)
+* [Usage](#usage)
+* [Setup](#setup)
 
-This version can handle either folders by looking recursively for all .nii files or individual .nii files. For each file it will save a new mask with the name name_mask.nii on the path of the original image, and it will skip those files that enf with mask.nii.
+## Description
 
-### About this branch
+Deep learning based project for the automatic masking of a fetal brain. It can take either individual NIfTI files or the contents
+of a specified directory.
 
-This branch has 2D dilation added. You can modify the shape and size of the dilation footprint by using the flag --dilation_footprint. Shapes allowed are square and disk.
+Currently only a U-net based model is available.
 
-### Requirementes
+Depending on the input provided (a file or a directory), this tool will recusively look for all .nii files. 
+It will save a new mask with the name name_mask.nii for each .nii file found on the path provided. and it 
+will skip those files that end with mask.nii unless specified otherwise with the --remasking flag.
+
+
+## Requirements
+
 - Python 3
 - pip
 
@@ -25,62 +35,48 @@ The following can be installed with the requirements.txt file:
 - tqdm==4.64.1
 - numpy==1.24.1
 
-### instalation
+## Usage
 
-recommended install virtualenvwrapper
-Make a virtual environment as to not mix dependencies
-    
-    $ pip install virtualenv virtualenvwrapper
+Its recommended that you create a virtual environment to prevent mixing dependencies. If you don't know how to create one,
+check out the [setup](#setup) section.
 
-Then, create a directory for your virtual environments e.g.:
-    
-    $ mkdir ~/python-envs
+Once you have a virtual environment with all the requirements installed, you can run this tool with the command:
 
-You might want to add to your .bashrc file these two lines:
+    (env_name)$ python individual_brain_mask.py [-h] [--remasking] [--no-remasking] [--post-processing] \
+                        [--no-post-processing] [--match MATCH [MATCH ...]] [--dilation_footprint SHAPE SIZE] \
+                        target_file [target_file ...]
+                        
+Where:
+   
+|              Argument             | Description                                                                                                                                              |
+|:---------------------------------:|----------------------------------------------------------------------------------------------------------------------------------------------------------|
+|           `target_file`           | Input path. Required.                                                                                                                                    |
+|                `-h`               | Show help message and exit                                                                                                                               |
+|           `--remasking`           | Indicates that images already masked should be remasked, rewritting all **_mask.nii* files found. Defaults to  *false*.                                 |
+|          `--no-remasking`         | Indicates to skip images that end with **_mask.nii*                                                                                                      |
+|        `--post-processing`        | Indicates that the predicted mask should be post processed (morphological closing and dilation). Defaults to  *true*.                                    |
+|       `--no-post-processing`      | Indicates that the predicted mask should *not* be post processed                                                                                         |
+|             `--match`             | Specify if only files with certain words should be masked. Not case sensitive.                                                                           |
+| `--dilation_footprint SHAPE SIZE` | Specify the shape and size of the footprint used for dilation. Shapes available are  **disk** and **square**. If none specified, default is **disk 2**. |
 
-    export WORKON_HOME=~/python-envs
-    source /usr/local/bin/virtualenvwrapper.sh
+## Limitations
+- Unet can currently only work with 256x256 images
 
-(Note depending on distro, the virtualenvwrapper.sh path might be
+## About this model
 
-    /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 
-Then you can source your .bashrc and create a new Python3 virtual environment:
 
-    $ source .bashrc
-    $ mkvirtualenv --python=python3 python_env
+## Setup
 
-To activate or "enter" the virtual env:
-
-    $ workon python_env
-
-To deactivate virtual env:
-
-    $ deactivate
-
-Create a new environment and activate it
-the environments name should appear at the beginnig of the shell 
+Create a new environment and activate it. VENV 
+The environments name should appear at the beginnig of the shell 
 surrounded by parentheses
 
-Download the source code, cd into your decired location
+Download the source code, cd into your desired location
 
     (env_name)$ git clone **
-    (env_name)$ cd brain-masking-tool
+    (env_name)$ cd brain-masking
 
-install requirements from requirements.txt
+Install requirements from requirements.txt
 
     (env_name)$ pip install -r requirements.txt
-
-to run the masking tool
-
-    (env_name)$ python individual_brain_mask.py path_to_dir [OPTION] [OPTION]
-    
-for usage help run
-
-    (env_name)$ python individual_brain_mask.py path_to_dir -h
-
-If no input is specified it will target the images directory, where you can also include images.
-you will have to activate the environment everytime you would like to use the tool.
-
-### limitation
-- Unet can currently only work with 256x256 images
