@@ -105,7 +105,7 @@ For further information on how virtual envirionments work, check the [python doc
 Download the source code, cd into your desired location
 
 ```python
-(env_name)$ git clone **
+(env_name)$ git clone https://github.com/sofia-urosa/brain-masking.git
 (env_name)$ cd brain-masking
 ```
 
