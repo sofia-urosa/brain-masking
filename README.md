@@ -24,10 +24,14 @@ will skip those files that end with mask.nii unless specified otherwise with the
 This model was trained with a dataset comprising of ~700 reviewed stacks of images and masks, adding to a total of ~20,000 images. 
 It has a wider range of data to improve its robustness. For the sake of identifying this model against priors, its called `emerald`.
 
-Here are some images showcasing its performance against the previous model, where the $\textcolor{cyan}{\text{blue}}$ mask corresponds to the old model and the $\textcolor{yellow}{\text{yellow}}$ mask to emeralds.
+Here are some images showcasing its performance against the previous model, where the $\textcolor{cyan}{\text{blue}}$ mask corresponds to the $\textcolor{cyan}{\text{old}}$ model and the $\textcolor{yellow}{\text{yellow}}$ mask to $\textcolor{yellow}{\text{emeralds}}$.
 
 ![image1](image1.png)
+
+
 ![image2](image2.png)
+
+
 ![image3](image3.png)
 
 ## Requirements
