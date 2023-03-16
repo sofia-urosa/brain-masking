@@ -26,13 +26,12 @@ It has a wider range of data to improve its robustness. For the sake of identify
 
 Here are some images showcasing its performance against the previous model, where the $\textcolor{NavyBlue}{\text{blue}}$ mask corresponds to the $\textcolor{NavyBlue}{\text{old}}$ model and the $\textcolor{yellow}{\text{yellow}}$ mask to $\textcolor{yellow}{\text{emeralds}}$.
 
+
 ![image1](image1.png)
 
 
 ![image2](image2.png)
 
-
-![image3](image3.png)
 
 ## Requirements
 
