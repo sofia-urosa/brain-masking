@@ -172,8 +172,8 @@ def main():
         if os.path.isfile(path):
             all_files = full_paths
         if os.path.isdir(path):
-            all_files = glob.glob(full_paths[0]+'/**/*.nii', recursive=True)
-            all_gz_files = glob.glob(full_paths[0]+'/**/*.nii.gz', recursive=True)
+            all_files = glob.glob(full_paths[0]+'/*.nii')
+            all_gz_files = glob.glob(full_paths[0]+'/*.nii.gz')
 
             all_files += all_gz_files
     if match:
@@ -188,6 +188,11 @@ def main():
     
     print('Found %d NIFTI files'%len(files))
 
+    if len(files) == 0:
+        print('No NIFTI files found, exiting')
+        parser.print_help()
+        sys.exit(0)
+
     if remasking:
         print('Remasking set to True, remasking all images found')
     else:
@@ -199,10 +204,6 @@ def main():
         print('Post processing set to False, not post processing output masks')
 
     files = [f for f in files if '_mask.nii' not in f]
-
-    if len(files) == 0:
-        print('No NIFTI files found, exiting')
-        sys.exit(0)
 
     if model_type == 'unet':
         print('Loading Unet model')
@@ -255,5 +256,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-    
