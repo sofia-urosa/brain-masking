@@ -49,7 +49,12 @@ parser.add_argument('--match',
 parser.add_argument('--dilation_footprint',
     nargs=2,
     default=disk(3),
-    help='Specify the shape and size of the footprint used for dilation. Shapes avaliable are disk and square. If none specified, default is disk(2). Usage example: --dilation-footprint square 3')
+    help='Default is disk(2), can modify shape and size [--dilation_footprint square 2].')
+
+parser.add_argument('--no-dilation',
+                    dest='no_dilation',
+                    action='store_false',
+                    help='Flag indicates no dilation will be performed')
 
 model_type = 'unet'
 
@@ -59,28 +64,31 @@ remasking = args.remasking
 post_processing = args.post_processing
 match = args.match
 dilation_footprint = args.dilation_footprint
+no_dilation=args.no_dilation
+
 
 if match:
     for i in range(len(match)):
         match[i] = match[i].lower()
 
-if type(dilation_footprint) is list:
-    try:
-        dilation_footprint[1] = int(dilation_footprint[1])
+if no_dilation :
+    if type(dilation_footprint) is list:
+        try:
+            dilation_footprint[1] = int(dilation_footprint[1])
 
-        if dilation_footprint[0] == 'square':
-            footprint=square(dilation_footprint[1])
-        elif dilation_footprint[0] == 'disk':
-                footprint = disk(dilation_footprint[1])
-        else:
-            print('Footprint shape not recognized, switching to default disk(2)')
+            if dilation_footprint[0] == 'square':
+                footprint=square(dilation_footprint[1])
+            elif dilation_footprint[0] == 'disk':
+                    footprint = disk(dilation_footprint[1])
+            else:
+                print('Footprint shape not recognized, switching to default disk(2)')
+                footprint = disk(2)
+
+        except ValueError:
+            print('That size is not supported, switching to default disk(2)')
             footprint = disk(2)
-
-    except ValueError:
-        print('That size is not supported, switching to default disk(2)')
+    else:
         footprint = disk(2)
-else:
-    footprint = disk(2)
 
 def getImageData(fname):
 
@@ -145,15 +153,16 @@ def __postProcessing(mask):
 
     mask = np.squeeze(mask)
     x , y , z = np.shape(mask)
-
     dilated_mask = np.zeros((x,y,z))
 
     #Binary dilation
-
-    for slice in range(z):
-        t = mask[:,:,slice]
-        slice_dilated = binary_dilation(t,footprint)*1
-        dilated_mask[:,:,slice] = slice_dilated
+    if no_dilation :
+        for slice in range(y):
+            t = mask[:,slice,:]
+            slice_dilated = binary_dilation(t,footprint)*1
+            dilated_mask[:,slice,:] = slice_dilated
+    else: 
+        dilated_mask = mask
 
     #Binary closing
     pred_mask = binary_closing(np.squeeze(dilated_mask), cube(2))
