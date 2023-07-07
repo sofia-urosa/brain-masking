@@ -57,7 +57,7 @@ Once you have a virtual environment with all the requirements installed, you can
 
 ```python
 python individual_brain_mask.py  target_file [target_file ...] [-h] [--remasking] [--no-remasking] [--post-processing] \
-[--no-post-processing] [--match MATCH [MATCH ...]] [--dilation_footprint SHAPE SIZE] [--no_dilation]
+[--no-post-processing] [--match MATCH [MATCH ...]] [--dilation_footprint SHAPE SIZE] [--no-dilation]
 ```
                         
 Where:
@@ -72,7 +72,7 @@ Where:
 |       `--no-post-processing`      | Indicates that the predicted mask should *not* be post processed                                                                                         |
 |             `--match`             | Specify if only files with certain words should be masked. Not case sensitive.                                                                           |
 | `--dilation_footprint SHAPE SIZE` | Specify the shape and size of the footprint used for dilation. Shapes available are  **disk** and **square**. If none specified, default is **disk 2**. |
-|         `--no_dilation`           | Masks without dilation.                                                                                                                                  |
+|         `--no-dilation`           | Masks without dilation.                                                                                                                                  |
 
 ## Limitations
 - Unet can currently only work with 256x256 images
