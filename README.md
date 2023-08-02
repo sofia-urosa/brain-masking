@@ -15,7 +15,7 @@ of a specified directory.
 
 Currently only a U-net based model is available.
 
-Depending on the input provided (a file or a directory), this tool will recusively look for all .nii files. 
+Depending on the input provided (a file or a directory), this tool will look for all .nii files inside of a folder. 
 It will save a new mask with the name name_mask.nii for each .nii file found on the path provided. and it 
 will skip those files that end with mask.nii unless specified otherwise with the --remasking flag.
 
